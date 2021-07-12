@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<div th:replace="fragments/header :: common_header"></div>
+
+<body>
+<div class="wrapper d-flex align-items-stretch">
+  <div th:replace="fragments/sidebar :: menu"></div>
+
+  <!-- Page Content  -->
+  <div id="content" class="p-4 p-md-5 pt-5">
+    <h2 class="mb-4">Recipe List</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Modified At</th>
+        <th scope="col">Control</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="recipe : ${recipes}">
+        <td scope="row" th:text="${recipe.id}"></td>
+        <td scope="row" th:text="${recipe.name}"></td>
+        <td scope="row" th:text="${recipe.description}"></td>
+        <td scope="row" th:text="${recipe.updatedAt}"></td>
+        <td scope="row">
+          <a th:href="@{|/flow/register|(recipeId=${recipe.id})}" target="_blank"><button type="button" class="btn btn-primary">Make Flow</button></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div th:replace="fragments/scripts :: js"></div>
+
+</body>
+</html>

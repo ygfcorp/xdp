@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav id="sidebar" th:fragment="menu">
+    <div class="custom-menu">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+            <i class="fa fa-bars"></i>
+            <span class="sr-only">Toggle Menu</span>
+        </button>
+    </div>
+    <h1><a href="index.html" class="logo">xDP</a></h1>
+    <ul class="list-unstyled components mb-5">
+        <li th:class="(${sidebarCategory} == 'Main' ? 'active' : '')">
+            <a href="/"><span class="fa fa-home mr-3"></span> Main</a>
+        </li>
+        <li th:class="(${sidebarCategory} == 'Recipe' ? 'active' : '')">
+            <a href="/recipes"><span class="fa fa-sticky-note mr-3"></span> Recipe</a>
+        </li>
+        <li th:class="(${sidebarCategory} == 'Flow' ? 'active' : '')">
+            <a href="/flows"><span class="fa fa-sticky-note mr-3"></span> Flow</a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

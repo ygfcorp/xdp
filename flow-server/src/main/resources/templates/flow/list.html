@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+
+<div th:replace="fragments/header :: common_header"></div>
+
+<body>
+<div class="wrapper d-flex align-items-stretch">
+  <div th:replace="fragments/sidebar :: menu"></div>
+
+  <!-- Page Content  -->
+  <div id="content" class="p-4 p-md-5 pt-5">
+    <h2 class="mb-4">Flow List</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Flow Status</th>
+        <th scope="col">Run Status</th>
+        <th scope="col">Modified At</th>
+        <th scope="col">Control</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="flow : ${flows}">
+        <td scope="row" th:text="${flow.id}"></td>
+        <td scope="row" th:text="${flow.name}"></td>
+        <td scope="row" th:text="${flow.status}"></td>
+        <td scope="row" th:utext="'<div>R: ' + ${flow.aggregatedProcessorStatus.running.size()} + '</div><div>S: ' + ${flow.aggregatedProcessorStatus.stopped.size()} + '</div><div>V: ' + ${flow.aggregatedProcessorStatus.validating.size()} + '</div><div>D: ' + ${flow.aggregatedProcessorStatus.disabled.size()} + '</div><div>I: ' + ${flow.aggregatedProcessorStatus.invalid.size()} + '</div>'"></td>
+        <td scope="row" th:text="${flow.updatedAt}"></td>
+        <td scope="row">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#runFlowModal" th:data-bs-flowid="${flow.id}">Run Flow</button>
+          <a th:href="@{|${nifiPath}/nifi|(processGroupId=${flow.nifiPGId})}" target="_blank"><button type="button" class="btn btn-primary">Link</button></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="runFlowModal" tabindex="-1" aria-labelledby="runFlowModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="runFlowModalLabel">Run Flow</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you want to run flow? <br/>
+        <div id="runFlowId">xxx</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="runFlowButton">Run it</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="fragments/scripts :: js"></div>
+
+<script>
+  document.getElementById('runFlowModal').addEventListener('show.bs.modal', function (event) {
+    document.getElementById('runFlowId').innerHTML = event.relatedTarget.getAttribute('data-bs-flowid');
+  })
+
+  $("#runFlowButton").bind('click', function () {
+    let flowId = document.getElementById('runFlowId').innerHTML
+
+    $.ajax({
+      url: 'v1/flows/' + flowId + '/execute',
+      type: 'post',
+      dataType: 'json',
+      success: function (data) {
+        alert(JSON.stringify(data));
+        document.getElementById('runFlowModal').hide();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

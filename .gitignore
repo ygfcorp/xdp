@@ -1,0 +1,12 @@
+#macos
+.DS_Store
+
+#gradle
+build
+.gradle
+
+#idea
+out
+.idea
+*.iml
+.run

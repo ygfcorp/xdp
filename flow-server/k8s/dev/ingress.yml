@@ -1,0 +1,23 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: flow-server
+    namespace: default
+    annotations:
+        ingress.kubernetes.io/rewrite-target: /
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+spec:
+    tls:
+        - hosts:
+              - flow-server.dev.ekakao.com
+          secretName: flow-server-dev-tls
+    rules:
+        - host: flow-server.dev.ekakao.com
+          http:
+              paths:
+                  - path: /
+                    backend:
+                        serviceName: flow-server
+                        servicePort: 8080

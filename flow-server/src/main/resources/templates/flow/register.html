@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+
+<div th:replace="fragments/header :: common_header"></div>
+
+<body>
+<div class="wrapper d-flex align-items-stretch">
+    <div th:replace="fragments/sidebar :: menu"></div>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+        <h2 class="mb-4">Register Flow</h2>
+        <form id="registerForm">
+            <input type="hidden" name="recipeId" th:value="${recipeId}" />
+            <div class="mb-3">
+                <label for="name">Name</label>
+                <input type="text" class="form-control border" name="name" id="name">
+            </div>
+            <div class="mb-3">
+                <label for="sourceType">Source Type</label>
+                <select class="form-control border" name="sourceType" id="sourceType">
+                    <option value="BIG_QUERY">BigQuery</option>
+                    <option value="RDB">RDB</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="sourceConnectionInfo">Source Connection</label>
+                <input type="text" class="form-control border" name="sourceConnectionInfo" id="sourceConnectionInfo">
+            </div>
+            <div class="mb-3">
+                <label for="sourceTable">Source Table</label>
+                <input type="text" class="form-control border" name="sourceTable" id="sourceTable">
+            </div>
+            <div class="mb-3">
+                <label for="sourceColumns">Source Columns</label>
+                <input type="text" class="form-control border" name="sourceColumns" id="sourceColumns">
+            </div>
+            <div class="mb-3">
+                <label for="destinationType">Destination Type</label>
+                <select class="form-control border" name="destinationType" id="destinationType">
+                    <option value="S3">S3</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="destinationConnectionInfo">Destination Connection</label>
+                <input type="text" class="form-control border" name="destinationConnectionInfo" id="destinationConnectionInfo">
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+            <a href="/flows" class="btn btn-primary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+<div th:replace="/fragments/scripts :: js"></div>
+
+<script>
+    $("#registerForm").submit(function (event) {
+        event.preventDefault();
+
+        let body = getFormData($(this));
+
+        $.ajax({
+            url: '/v1/flow',
+            type: 'post',
+            data: JSON.stringify(body),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data) {
+                alert(JSON.stringify(data));
+            }
+        });
+    });
+
+    function getFormData($form) {
+        let unindexed_array = $form.serializeArray();
+        let indexed_array = {};
+
+        $.map(unindexed_array, function(n, i){
+            indexed_array[n['name']] = n['value'];
+        });
+
+        return indexed_array;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+---
+phase: LOCAL
+
+server:
+    port: 8080
+
+db:
+    host: jdbc:mysql://xdp-poc.crg7x6va7xzx.ap-northeast-2.rds.amazonaws.com/xdp_poc
+    port: 3306
+    user: admin
+    password: rptf135!#%
+
+monitoring:
+    host: none
+    port: 0
+
+nifi:
+    headless: http://127.0.0.1:38080
+    ui: http://127.0.0.1:38080
+
+---
+phase: DEV
+
+server:
+    port: 8080
+
+db:
+    host: jdbc:mysql://xdp-poc.crg7x6va7xzx.ap-northeast-2.rds.amazonaws.com/xdp_poc
+    port: 3306
+    user: admin
+    password: rptf135!#%
+
+monitoring:
+    host: none
+    port: 0
+
+nifi:
+    headless: http://nifi-headless:8080
+    ui: https://nifi.dev.ekakao.com
