@@ -38,10 +38,10 @@ jobs:
         run: ls -al
 
       - name: Dump conext - github
-        run: echo ${{ toJson(github) }}
+        run: echo "${{ toJson(github) }}"
 
       - name: Dump conext - job
-        run: echo ${{ toJson(job) }}
+        run: echo "${{ toJson(job) }}"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
