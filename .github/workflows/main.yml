@@ -37,8 +37,11 @@ jobs:
       - name: Run ls -al
         run: ls -al
 
-      - name: Dump conext
-        run: echo ${{ toJson(context) }}
+      - name: Dump conext - github
+        run: echo ${{ toJson(github) }}
+
+      - name: Dump conext - job
+        run: echo ${{ toJson(job) }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
