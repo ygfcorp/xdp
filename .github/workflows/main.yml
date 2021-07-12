@@ -37,11 +37,11 @@ jobs:
       - name: Run ls -al
         run: ls -al
 
-      - name: Dump conext - github
-        run: echo "${{ toJson(github) }}"
-
-      - name: Dump conext - job
-        run: echo "${{ toJson(job) }}"
+#      - name: Dump conext - github
+#        run: echo "${{ toJson(github) }}"
+#
+#      - name: Dump conext - job
+#        run: echo "${{ toJson(job) }}"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -70,5 +70,18 @@ jobs:
       - name: Build & Push Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:jake-latest1
-        run: echo "$RELEASE_IMAGE"
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+#        run: echo "$RELEASE_IMAGE"
+        run: |
+          docker buildx create --use
+
+          docker buildx build \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache-new \
+            --tag ${{ env.RELEASE_IMAGE }} \
+            --target release \
+            --push \
+            .
+
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
