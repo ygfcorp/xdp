@@ -43,6 +43,18 @@ jobs:
 #      - name: Dump conext - job
 #        run: echo "${{ toJson(job) }}"
 
+      - name: Setup JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew :flow-server:clean :flow-server:shadowJar -x test
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
